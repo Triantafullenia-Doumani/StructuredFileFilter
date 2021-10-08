@@ -1,7 +1,5 @@
 # StructuredFileFilter
 
-# StructuredFileFilter
-
 :owl: ena akoma project gia na kopw epeidh den grafw unit tests me to xeri 
 
 ## Git :cherries:	
