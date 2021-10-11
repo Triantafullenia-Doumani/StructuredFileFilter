@@ -1,3 +1,4 @@
+TEST FROM 1st ECLIPSE COMMIT
 EXAMPLE
 
 Assume that the project is being carried out by two students
