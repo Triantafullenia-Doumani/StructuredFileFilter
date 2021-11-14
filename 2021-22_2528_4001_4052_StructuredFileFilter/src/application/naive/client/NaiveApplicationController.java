@@ -110,6 +110,12 @@ public class NaiveApplicationController {
 		this.visualizationEngine.showSingleSeriesLineChart(pAlias, series, pXAxisName, pYAxisName, outputFileName, xPos,
 				yPos);
 	}
+	
+	/** Program Starts Here **/
+    public static void main(String[] args){
+
+        return;
+    }
 
 }// end class
 
