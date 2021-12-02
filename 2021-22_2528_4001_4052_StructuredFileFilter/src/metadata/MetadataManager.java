@@ -1,5 +1,8 @@
 package metadata;
 
+import java.io.File;
+import java.util.Map;
+
 public class MetadataManager implements MetadataManagerInterface{
 
 	/**
@@ -9,8 +12,8 @@ public class MetadataManager implements MetadataManagerInterface{
 	 * @return a Map with the String name of the column as key and an Integer with
 	 *         the position of the column as value
 	 */
-	public abstract Map<String, Integer> getFieldPositions(){
-		return;
+	public Map<String, Integer> getFieldPositions(){
+		return null;
 	}
 
 	/**
@@ -20,8 +23,8 @@ public class MetadataManager implements MetadataManagerInterface{
 	 * @return a File object representing the data file that the metadata manager
 	 *         handles
 	 */
-	public abstract File getDataFile() {
-		return;
+	public File getDataFile() {
+		return null;
 	}
 
 	/**
@@ -29,8 +32,8 @@ public class MetadataManager implements MetadataManagerInterface{
 	 * 
 	 * @return a String with column separator
 	 */
-	public abstract String getSeparator() {
-		return;
+	public String getSeparator() {
+		return null;
 	}
 
 	/**
@@ -39,7 +42,8 @@ public class MetadataManager implements MetadataManagerInterface{
 	 * 
 	 * @return an array of String with the column names
 	 */
-	public abstract String[] getColumnNames() {
+	public String[] getColumnNames() {
+		return null;
 		
 	}
 
