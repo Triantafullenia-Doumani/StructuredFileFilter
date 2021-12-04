@@ -21,7 +21,7 @@ public class NaiveApplicationController {
 
 	private final StructuredFileManagerInterface fileManager;
 	private final VisualizationEngine visualizationEngine;
-	private Scanner scanner;
+	private static Scanner scanner;
 
 	public NaiveApplicationController() {
 		StructuredFileManagerFactory engineFactory = new StructuredFileManagerFactory();
@@ -117,18 +117,16 @@ public class NaiveApplicationController {
 	}
 	
 	public String askForFileToken() {
+		
         System.out.println("Please enter a file token");
         String fileToken = null;
         while(true) {
-        	try {
-                //TODO check if already exists;
             	fileToken = scanner.nextLine();
+            	if(fileToken == null) {
+                    System.out.println("DWSE KALO TOKEN");
+            		continue;
+            	}
 				return fileToken;
-	   		} catch (NullPointerException ex) {
-	   			System.out.println("DWSE MOU ENA TOKEN TWRA");
-	   			continue;
-	        }
-
         }
 	}
 	
@@ -158,10 +156,12 @@ public class NaiveApplicationController {
     public static void main(String[] args){
 
     	NaiveApplicationController naiveAppController  = new NaiveApplicationController();
+    	scanner = new Scanner(System.in);
         String fileToken = naiveAppController.askForFileToken();
         String filePath = naiveAppController.askForFilePath();
         String fileSEparator = naiveAppController.askForFileSeparator();
     	
+        
         return;	
     }	 
 
