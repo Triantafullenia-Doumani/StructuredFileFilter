@@ -5,8 +5,14 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.util.List;
 import java.util.Map;
+import java.util.Scanner;
+
+import metadata.MetadataManager;
+import filtering.FilteringEngine;
 
 public class StructuredFileManager implements StructuredFileManagerInterface{
+
+	
 
 	/**
 	 * A method to allow the back end engine to learn the characteristics of a file
@@ -20,9 +26,19 @@ public class StructuredFileManager implements StructuredFileManagerInterface{
 	 * @throws IOException
 	 * @throws NullPointerException
 	 */
+	
+	 //how to use params
 	public File registerFile(String pAlias, String pPath, String pSeparator) throws IOException, NullPointerException{
-		
-		return null;
+		if(pAlias == null || pPath == null || pSeparator == null) {
+			throw new NullPointerException();
+		}
+	    try {
+			File file = new File(pPath);   
+	        Scanner scanner = new Scanner(file);
+	      } catch (IOException e) {
+	    	  throw new IOException();
+	      }
+        return null;
 	}
 
 	/**

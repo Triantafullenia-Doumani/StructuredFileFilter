@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.nio.file.InvalidPathException;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -22,6 +23,7 @@ public class NaiveApplicationController {
 	private final StructuredFileManagerInterface fileManager;
 	private final VisualizationEngine visualizationEngine;
 	private static Scanner scanner;
+	private ArrayList<File> files = new ArrayList<File>(); // Create an ArrayList object
 
 	public NaiveApplicationController() {
 		StructuredFileManagerFactory engineFactory = new StructuredFileManagerFactory();
@@ -116,21 +118,21 @@ public class NaiveApplicationController {
 				yPos);
 	}
 	
-	public String askForFileToken() {
+	public String askForAlias() {
 		
-        System.out.println("Please enter a file token");
-        String fileToken = null;
+        System.out.println("Please enter a file Alias");
+        String fileAlias = null;
         while(true) {
-            	fileToken = scanner.nextLine();
-            	if(fileToken == null) {
-                    System.out.println("DWSE KALO TOKEN");
+            	fileAlias = scanner.nextLine();
+            	if(fileAlias == null) {
+                    System.out.println("DWSE KALO Alias");
             		continue;
             	}
-				return fileToken;
+				return fileAlias;
         }
 	}
 	
-	public String askForFilePath() {
+	public String askForPath() {
 		System.out.println("Please enter file path");
 		String filePath = null;
 		while(true) {
@@ -144,7 +146,7 @@ public class NaiveApplicationController {
 	        }
 		}
 	}
-	public String askForFileSeparator() {
+	public String askForSeparator() {
 		
         System.out.println("Please enter the file separator. ',' '\t' or '|' for example");
         String fileSeparator = scanner.nextLine();        
@@ -157,11 +159,11 @@ public class NaiveApplicationController {
 
     	NaiveApplicationController naiveAppController  = new NaiveApplicationController();
     	scanner = new Scanner(System.in);
-        String fileToken = naiveAppController.askForFileToken();
-        String filePath = naiveAppController.askForFilePath();
-        String fileSEparator = naiveAppController.askForFileSeparator();
-    	
-        
+        String fileAlias = naiveAppController.askForAlias();
+        String filePath = naiveAppController.askForPath();
+        String fileSeparator = naiveAppController.askForSeparator();
+        naiveAppController.registerFile(fileAlias, filePath, fileSeparator);
+        scanner.close();
         return;	
     }	 
 
