@@ -5,6 +5,9 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.nio.file.InvalidPathException;
+import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -13,11 +16,13 @@ import application.chart.management.VisualizationEngine;
 import application.jtable.management.JTableViewer;
 import file.manager.StructuredFileManagerFactory;
 import file.manager.StructuredFileManagerInterface;
+import java.util.Scanner;
 
 public class NaiveApplicationController {
 
 	private final StructuredFileManagerInterface fileManager;
 	private final VisualizationEngine visualizationEngine;
+	private static Scanner scanner;
 
 	public NaiveApplicationController() {
 		StructuredFileManagerFactory engineFactory = new StructuredFileManagerFactory();
@@ -89,6 +94,7 @@ public class NaiveApplicationController {
 
 		jTableViewer = new JTableViewer(result, columnNames);
 		jTableViewer.createAndShowJTable();
+
 	}
 
 	public void showSingleSeriesBarChart(String pAlias, List<String[]> series, String pXAxisName, String pYAxisName,
@@ -111,11 +117,54 @@ public class NaiveApplicationController {
 				yPos);
 	}
 	
+	public String askForAlias() {
+		
+        System.out.println("Please enter a file Alias");
+        String fileAlias = null;
+        while(true) {
+            	fileAlias = scanner.nextLine();
+            	if(fileAlias == null) {
+                    System.out.println("DWSE KALO Alias");
+            		continue;
+            	}
+				return fileAlias;
+        }
+	}
+	
+	public String askForPath() {
+		System.out.println("Please enter file path");
+		String filePath = null;
+		while(true) {
+			filePath = scanner.nextLine();
+			try {
+	        	Paths.get(filePath);
+				return filePath;
+	   		} catch (InvalidPathException | NullPointerException ex) {
+	   			System.out.println("I AM ASKING FOR A REAL PATH");
+	   			continue;
+	        }
+		}
+	}
+	public String askForSeparator() {
+		
+        System.out.println("Please enter the file separator. ',' '\t' or '|' for example");
+        String fileSeparator = scanner.nextLine();        
+        return fileSeparator;
+        // thelw kanenan elegxo gia auto?
+
+	}
 	/** Program Starts Here **/
     public static void main(String[] args){
 
-        return;
-    }
+    	NaiveApplicationController naiveAppController  = new NaiveApplicationController();
+    	scanner = new Scanner(System.in);
+        String fileAlias = naiveAppController.askForAlias();
+        String filePath = naiveAppController.askForPath();
+        String fileSeparator = naiveAppController.askForSeparator();
+        naiveAppController.registerFile(fileAlias, filePath, fileSeparator);
+        scanner.close();
+        return;	
+    }	 
 
 }// end class
 
