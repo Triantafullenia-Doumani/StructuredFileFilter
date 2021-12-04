@@ -5,6 +5,8 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.nio.file.InvalidPathException;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -13,11 +15,13 @@ import application.chart.management.VisualizationEngine;
 import application.jtable.management.JTableViewer;
 import file.manager.StructuredFileManagerFactory;
 import file.manager.StructuredFileManagerInterface;
+import java.util.Scanner;
 
 public class NaiveApplicationController {
 
 	private final StructuredFileManagerInterface fileManager;
 	private final VisualizationEngine visualizationEngine;
+	private Scanner scanner;
 
 	public NaiveApplicationController() {
 		StructuredFileManagerFactory engineFactory = new StructuredFileManagerFactory();
@@ -89,6 +93,7 @@ public class NaiveApplicationController {
 
 		jTableViewer = new JTableViewer(result, columnNames);
 		jTableViewer.createAndShowJTable();
+
 	}
 
 	public void showSingleSeriesBarChart(String pAlias, List<String[]> series, String pXAxisName, String pYAxisName,
@@ -111,11 +116,54 @@ public class NaiveApplicationController {
 				yPos);
 	}
 	
+	public String askForFileToken() {
+        System.out.println("Please enter a file token");
+        String fileToken = null;
+        while(true) {
+        	try {
+                //TODO check if already exists;
+            	fileToken = scanner.nextLine();
+				return fileToken;
+	   		} catch (NullPointerException ex) {
+	   			System.out.println("DWSE MOU ENA TOKEN TWRA");
+	   			continue;
+	        }
+
+        }
+	}
+	
+	public String askForFilePath() {
+		System.out.println("Please enter file path");
+		String filePath = null;
+		while(true) {
+			filePath = scanner.nextLine();
+			try {
+	        	Paths.get(filePath);
+				return filePath;
+	   		} catch (InvalidPathException | NullPointerException ex) {
+	   			System.out.println("I AM ASKING FOR A REAL PATH");
+	   			continue;
+	        }
+		}
+	}
+	public String askForFileSeparator() {
+		
+        System.out.println("Please enter the file separator. ',' '\t' or '|' for example");
+        String fileSeparator = scanner.nextLine();        
+        return fileSeparator;
+        // thelw kanenan elegxo gia auto?
+
+	}
 	/** Program Starts Here **/
     public static void main(String[] args){
 
-        return;
-    }
+    	NaiveApplicationController naiveAppController  = new NaiveApplicationController();
+        String fileToken = naiveAppController.askForFileToken();
+        String filePath = naiveAppController.askForFilePath();
+        String fileSEparator = naiveAppController.askForFileSeparator();
+    	
+        return;	
+    }	 
 
 }// end class
 

@@ -21,6 +21,11 @@ public class StructuredFileManager implements StructuredFileManagerInterface{
 	 * @throws NullPointerException
 	 */
 	public File registerFile(String pAlias, String pPath, String pSeparator) throws IOException, NullPointerException{
+		
+    	if(pAlias == null || pPath == null || pSeparator  == null) {
+    		throw new NullPointerExceptin("Vale parametrous vlaka");
+    	}
+    	
 		return null;
 	}
 
