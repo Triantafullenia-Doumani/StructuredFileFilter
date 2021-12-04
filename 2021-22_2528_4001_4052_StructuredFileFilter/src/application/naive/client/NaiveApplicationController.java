@@ -23,7 +23,6 @@ public class NaiveApplicationController {
 	private final StructuredFileManagerInterface fileManager;
 	private final VisualizationEngine visualizationEngine;
 	private static Scanner scanner;
-	private ArrayList<File> files = new ArrayList<File>(); // Create an ArrayList object
 
 	public NaiveApplicationController() {
 		StructuredFileManagerFactory engineFactory = new StructuredFileManagerFactory();
