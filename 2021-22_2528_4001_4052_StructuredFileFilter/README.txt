@@ -1,3 +1,4 @@
+TEST FROM 1st ECLIPSE COMMIT
 EXAMPLE
 
 Assume that the project is being carried out by two students
@@ -17,3 +18,5 @@ Kitsos Kitsopoulos with AM 4678
 Req's
 No extra libraries are needed
 ********************************************
+
+test

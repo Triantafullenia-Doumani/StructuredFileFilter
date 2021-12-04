@@ -1,5 +1,11 @@
 package file.manager;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.PrintStream;
+import java.util.List;
+import java.util.Map;
+
 public class StructuredFileManager implements StructuredFileManagerInterface{
 
 	/**
@@ -15,7 +21,7 @@ public class StructuredFileManager implements StructuredFileManagerInterface{
 	 * @throws NullPointerException
 	 */
 	public File registerFile(String pAlias, String pPath, String pSeparator) throws IOException, NullPointerException{
-		return;
+		return null;
 	}
 
 	/**
@@ -27,7 +33,7 @@ public class StructuredFileManager implements StructuredFileManagerInterface{
 	 *         alias has not been registered
 	 */
 	public String[] getFileColumnNames(String pAlias) {
-		return;
+		return null;
 	}
 
 	/**
@@ -46,7 +52,7 @@ public class StructuredFileManager implements StructuredFileManagerInterface{
 	 *         record in the result is represented as an array of strings.
 	 */
 	public List<String[]> filterStructuredFile(String pAlias, Map<String, List<String>> pAtomicFilters){
-		return;
+		return null;
 	}
 
 	/**
@@ -61,8 +67,7 @@ public class StructuredFileManager implements StructuredFileManagerInterface{
 	 *         number of records directed to the PrintStream otherwise.
 	 */
 	public int printResultsToPrintStream(List<String[]> recordList, PrintStream pOut) {
-		return;
+		return 0;
 	}
-	
 	
 }
