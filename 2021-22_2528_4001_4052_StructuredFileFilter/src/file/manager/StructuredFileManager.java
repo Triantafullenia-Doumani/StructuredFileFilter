@@ -38,10 +38,11 @@ public class StructuredFileManager implements StructuredFileManagerInterface{
 	 */
 	
 	public File registerFile(String pAlias, String pPath, String pSeparator) throws IOException, NullPointerException{
-		NaiveFileMetadataManager metadata = new NaiveFileMetadataManager(pAlias,pPath,pSeparator); 
-		File file = metadata.registerFile();
+		File pFile = new File(pPath);   
+		NaiveFileMetadataManager metadata = new NaiveFileMetadataManager(pAlias,pFile,pSeparator); 
+		metadata.registerFile();
 		allMetadata.put(pAlias,metadata);
-        return file;
+        return pFile;
 	}
 	
 	/**
