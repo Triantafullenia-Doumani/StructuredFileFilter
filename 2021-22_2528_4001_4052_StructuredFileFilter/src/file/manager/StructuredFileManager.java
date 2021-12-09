@@ -77,7 +77,9 @@ public class StructuredFileManager implements StructuredFileManagerInterface{
 	 *         alias has not been registered
 	 */
 	public String[] getFileColumnNames(String pAlias) {
-		return null;
+		//MetadataManager metadata = new MetadataManager(); 
+		MetadataManager metadata = this.allMetadata.get(pAlias);
+		return metadata.getColumnNames();
 	}
 
 	/**

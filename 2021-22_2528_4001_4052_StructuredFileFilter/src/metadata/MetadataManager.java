@@ -13,8 +13,7 @@ public class MetadataManager implements MetadataManagerInterface{
 	private String[] columnNames; 
 	private File file;
 	private ArrayList<String []> dataFile;
-	
-	
+		
 	public MetadataManager(String pAlias, String pPath, String pSeparator, String [] columnNames, File file, ArrayList<String [] > dataFile) {
 		this.pAlias 		= pAlias;
 		this.pPath 			= pPath;
@@ -23,6 +22,10 @@ public class MetadataManager implements MetadataManagerInterface{
 		this.columnNames 	= columnNames;
 		this.dataFile 		= dataFile;
 	}
+	public MetadataManager() {
+		// TODO Auto-generated constructor stub
+	}
+
 	/**
 	 * Returns a mapping of the fields to their position in the structure of the
 	 * record files
