@@ -37,13 +37,13 @@ public class StructuredFileManager implements StructuredFileManagerInterface{
 	 * @throws NullPointerException
 	 */
 	
-	 //how to use params
 	public File registerFile(String pAlias, String pPath, String pSeparator) throws IOException, NullPointerException{
 		
 		ArrayList<String [] > dataFile = new ArrayList<String []>();
 		File file;
 		String [] columnNamesArray;
 		Scanner scanner;
+		MetadataManager metadata; 
 		if(pAlias == null || pPath == null || pSeparator == null) {
 			throw new NullPointerException();
 		}
@@ -61,8 +61,10 @@ public class StructuredFileManager implements StructuredFileManagerInterface{
 		  throw new IOException();
 		}
 		scanner.close();
-		MetadataManager metadata = new MetadataManager(pAlias,pPath,pSeparator,columnNamesArray, file, dataFile);
+		metadata = new MetadataManager(pAlias,pPath,pSeparator,columnNamesArray, file, dataFile);
 		allMetadata.put(pAlias,metadata);
+		
+		
         return file;
 	}
 	
