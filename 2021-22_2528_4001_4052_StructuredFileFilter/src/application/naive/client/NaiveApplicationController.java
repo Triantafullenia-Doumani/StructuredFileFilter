@@ -35,7 +35,7 @@ public class NaiveApplicationController {
 			resultFile = this.fileManager.registerFile(pAlias, pPath, pSeparator);
 		} catch (NullPointerException e) {
 			System.err.println("NaiveApplicationController::registerFile NullPointerException");
-			e.printStackTrace();
+			e.prfile:///home/roze/eclipse-workspace/.metadata/.plugins/org.eclipse.jdt.ui/jdt-images/4.pngintStackTrace();
 		} catch (IOException e) {
 			System.err.println("NaiveApplicationController::registerFile IOException");
 			e.printStackTrace();
