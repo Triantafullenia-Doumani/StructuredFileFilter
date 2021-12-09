@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
@@ -12,11 +13,16 @@ import metadata.MetadataManager;
 import filtering.FilteringEngine;
 
 public class StructuredFileManager implements StructuredFileManagerInterface{
+	
+	private HashMap<String, MetadataManager> allMetadata;
 
+	public StructuredFileManager() {
+		this.allMetadata =  new HashMap<String, MetadataManager>();
+	}
+	
 	public String[] separateLine(String line, String separator){
 		 return line.split(separator);
 	}
-	
 
 	/**
 	 * A method to allow the back end engine to learn the characteristics of a file
@@ -34,24 +40,29 @@ public class StructuredFileManager implements StructuredFileManagerInterface{
 	 //how to use params
 	public File registerFile(String pAlias, String pPath, String pSeparator) throws IOException, NullPointerException{
 		
-		ArrayList<String [] > fileData = new ArrayList<String []>();
+		ArrayList<String [] > dataFile = new ArrayList<String []>();
 		File file;
+		String [] columnNamesArray;
+		Scanner scanner;
 		if(pAlias == null || pPath == null || pSeparator == null) {
 			throw new NullPointerException();
 		}
 	    try {
 			file = new File(pPath);   
-	        Scanner scanner = new Scanner(file);
-	        String headers = scanner.nextLine();
-	        // TODO  pare prwth grammh kai vale thn kapou or not 
+	        scanner = new Scanner(file);
+	        String columnNames = scanner.nextLine();
+	        columnNamesArray = separateLine(columnNames,pSeparator);
 	        while (scanner.hasNextLine()) {
 	            String line = scanner.nextLine();
-	            String [] lineSplited = separateLine(line,pSeparator);
-	            fileData.add(lineSplited);
+	            String [] lineArray = separateLine(line,pSeparator);
+	            dataFile.add(lineArray);
 	          }
-	      } catch (IOException e) {
-	    	  throw new IOException();
-	      }
+		} catch (IOException e) {
+		  throw new IOException();
+		}
+		scanner.close();
+		MetadataManager metadata = new MetadataManager(pAlias,pPath,pSeparator,columnNamesArray, file, dataFile);
+		allMetadata.put(pAlias,metadata);
         return file;
 	}
 	
