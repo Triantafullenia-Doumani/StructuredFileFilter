@@ -10,19 +10,19 @@ import java.util.Map;
 import java.util.Scanner;
 
 import metadata.MetadataManager;
+import metadata.NaiveFileMetadataManager;
 import filtering.FilteringEngine;
 
 public class StructuredFileManager implements StructuredFileManagerInterface{
 	
-	private HashMap<String, MetadataManager> allMetadata;
+	private HashMap<String, NaiveFileMetadataManager> allMetadata;
+	private FilteringEngine filteringEngine;
+	
 
 	public StructuredFileManager() {
-		this.allMetadata =  new HashMap<String, MetadataManager>();
+		this.allMetadata		= new HashMap<String, NaiveFileMetadataManager>();
 	}
 	
-	public String[] separateLine(String line, String separator){
-		 return line.split(separator);
-	}
 
 	/**
 	 * A method to allow the back end engine to learn the characteristics of a file
@@ -38,33 +38,9 @@ public class StructuredFileManager implements StructuredFileManagerInterface{
 	 */
 	
 	public File registerFile(String pAlias, String pPath, String pSeparator) throws IOException, NullPointerException{
-		
-		ArrayList<String [] > dataFile = new ArrayList<String []>();
-		File file;
-		String [] columnNamesArray;
-		Scanner scanner;
-		MetadataManager metadata; 
-		if(pAlias == null || pPath == null || pSeparator == null) {
-			throw new NullPointerException();
-		}
-	    try {
-			file = new File(pPath);   
-	        scanner = new Scanner(file);
-	        String columnNames = scanner.nextLine();
-	        columnNamesArray = separateLine(columnNames,pSeparator);
-	        while (scanner.hasNextLine()) {
-	            String line = scanner.nextLine();
-	            String [] lineArray = separateLine(line,pSeparator);
-	            dataFile.add(lineArray);
-	          }
-		} catch (IOException e) {
-		  throw new IOException();
-		}
-		scanner.close();
-		metadata = new MetadataManager(pAlias,pPath,pSeparator,columnNamesArray, file, dataFile);
+		NaiveFileMetadataManager metadata = new NaiveFileMetadataManager(pAlias,pPath,pSeparator); 
+		File file = metadata.registerFile();
 		allMetadata.put(pAlias,metadata);
-		
-		
         return file;
 	}
 	
@@ -78,7 +54,7 @@ public class StructuredFileManager implements StructuredFileManagerInterface{
 	 */
 	public String[] getFileColumnNames(String pAlias) {
 		//MetadataManager metadata = new MetadataManager(); 
-		MetadataManager metadata = this.allMetadata.get(pAlias);
+		NaiveFileMetadataManager metadata = this.allMetadata.get(pAlias);
 		return metadata.getColumnNames();
 	}
 
@@ -98,6 +74,8 @@ public class StructuredFileManager implements StructuredFileManagerInterface{
 	 *         record in the result is represented as an array of strings.
 	 */
 	public List<String[]> filterStructuredFile(String pAlias, Map<String, List<String>> pAtomicFilters){
+		NaiveFileMetadataManager metadata = this.allMetadata.get(pAlias);
+		
 		return null;
 	}
 
