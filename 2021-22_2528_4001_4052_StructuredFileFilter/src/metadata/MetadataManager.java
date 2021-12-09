@@ -1,10 +1,29 @@
 package metadata;
 
 import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Map;
+import java.util.Scanner;
 
 public class MetadataManager implements MetadataManagerInterface{
 
+	private String pAlias;
+	private String pPath;
+	private String pSeparator;
+	private String[] columnNames;
+	private File file;
+	private ArrayList<String []> dataFile;
+	
+	
+	public MetadataManager(String pAlias, String pPath, String pSeparator, String [] columnNames, File file, ArrayList<String [] > dataFile) {
+		this.pAlias = pAlias;
+		this.pPath 	= pPath;
+		this.pSeparator = pSeparator;
+		this.file = file;
+		this.columnNames = columnNames;
+		this.dataFile = dataFile;
+	}
 	/**
 	 * Returns a mapping of the fields to their position in the structure of the
 	 * record files
@@ -13,6 +32,7 @@ public class MetadataManager implements MetadataManagerInterface{
 	 *         the position of the column as value
 	 */
 	public Map<String, Integer> getFieldPositions(){
+		
 		return null;
 	}
 
@@ -24,7 +44,7 @@ public class MetadataManager implements MetadataManagerInterface{
 	 *         handles
 	 */
 	public File getDataFile() {
-		return null;
+		return this.file;
 	}
 
 	/**
@@ -33,7 +53,7 @@ public class MetadataManager implements MetadataManagerInterface{
 	 * @return a String with column separator
 	 */
 	public String getSeparator() {
-		return null;
+		return this.pSeparator;
 	}
 
 	/**
@@ -43,7 +63,7 @@ public class MetadataManager implements MetadataManagerInterface{
 	 * @return an array of String with the column names
 	 */
 	public String[] getColumnNames() {
-		return null;
+		return this.columnNames;
 		
 	}
 

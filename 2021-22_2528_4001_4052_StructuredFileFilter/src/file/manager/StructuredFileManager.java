@@ -3,6 +3,7 @@ package file.manager;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
@@ -12,6 +13,9 @@ import filtering.FilteringEngine;
 
 public class StructuredFileManager implements StructuredFileManagerInterface{
 
+	public String[] separateLine(String line, String separator){
+		 return line.split(separator);
+	}
 	
 
 	/**
@@ -29,18 +33,28 @@ public class StructuredFileManager implements StructuredFileManagerInterface{
 	
 	 //how to use params
 	public File registerFile(String pAlias, String pPath, String pSeparator) throws IOException, NullPointerException{
+		
+		ArrayList<String [] > fileData = new ArrayList<String []>();
+		File file;
 		if(pAlias == null || pPath == null || pSeparator == null) {
 			throw new NullPointerException();
 		}
 	    try {
-			File file = new File(pPath);   
+			file = new File(pPath);   
 	        Scanner scanner = new Scanner(file);
+	        String headers = scanner.nextLine();
+	        // TODO  pare prwth grammh kai vale thn kapou or not 
+	        while (scanner.hasNextLine()) {
+	            String line = scanner.nextLine();
+	            String [] lineSplited = separateLine(line,pSeparator);
+	            fileData.add(lineSplited);
+	          }
 	      } catch (IOException e) {
 	    	  throw new IOException();
 	      }
-        return null;
+        return file;
 	}
-
+	
 	/**
 	 * Returns an array of String with the column names of the file registered with
 	 * the alias parameter

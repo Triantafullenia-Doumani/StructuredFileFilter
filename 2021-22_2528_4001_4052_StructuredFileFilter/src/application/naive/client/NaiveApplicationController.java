@@ -35,7 +35,6 @@ public class NaiveApplicationController {
 			resultFile = this.fileManager.registerFile(pAlias, pPath, pSeparator);
 		} catch (NullPointerException e) {
 			System.err.println("NaiveApplicationController::registerFile NullPointerException");
-			e.prfile:///home/roze/eclipse-workspace/.metadata/.plugins/org.eclipse.jdt.ui/jdt-images/4.pngintStackTrace();
 		} catch (IOException e) {
 			System.err.println("NaiveApplicationController::registerFile IOException");
 			e.printStackTrace();
@@ -146,7 +145,7 @@ public class NaiveApplicationController {
 	}
 	public String askForSeparator() {
 		
-        System.out.println("Please enter the file separator. ',' '\t' or '|' for example");
+        System.out.println("Please enter the file separator. ',' '\\t' or '|' for example");
         String fileSeparator = scanner.nextLine();        
         return fileSeparator;
         // thelw kanenan elegxo gia auto?
