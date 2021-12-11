@@ -23,10 +23,22 @@ public class FilteringEngine implements FilteringEngineInterface {
 	 *                         as key, and a list of acceptable values as the value
 	 * @param pMetadataManager a MetadataManager practically representing the file
 	 *                         being filtered
-	 * @return
+	 * @return 0 succes, -1 fail.
 	 */
 	public int setupFilteringEngine(Map<String, List<String>> pAtomicFilters,
 			MetadataManagerInterface pMetadataManager) {
+		
+		// TODO ean Map<String> =/ ta pedia mas, return -1;
+		
+		ArrayList<String[]> document = new ArrayList<String[]>();
+		document = pMetadataManager.getDocument();
+		
+		for(int i=0; i< )
+			for(int j=0; j<document.length; j++) {
+			
+			}
+		
+		
 		return 0;
 	}
 

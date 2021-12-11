@@ -13,7 +13,7 @@ public class NaiveFileMetadataManager implements MetadataManagerInterface{
 	private File pFile;
 	private String pSeparator;
 	private String[] columnNames; 
-	private ArrayList<String []> dataFile;
+	private ArrayList<String []> document;
 	
 	public String[] separateLine(String line, String separator){
 		 return line.split(separator);
@@ -26,7 +26,7 @@ public class NaiveFileMetadataManager implements MetadataManagerInterface{
 	}
 	
 	public void registerFile() throws IOException {
-		ArrayList<String [] > dataFile = new ArrayList<String []>();
+		ArrayList<String [] > document = new ArrayList<String []>();
 		File file;
 		Scanner scanner;
 	    try {
@@ -36,16 +36,16 @@ public class NaiveFileMetadataManager implements MetadataManagerInterface{
 	        while (scanner.hasNextLine()) {
 	            String line = scanner.nextLine();
 	            String [] lineArray = separateLine(line,pSeparator);
-	            dataFile.add(lineArray);
+	            document.add(lineArray);
 	          }
 		} catch (IOException e) {
 		  throw new IOException();
 		}
-	    setDataFile(dataFile);
+	    setDocument(document);
 		scanner.close();
 	}
-	public void setDataFile(ArrayList<String [] > dataFile) {
-		this.dataFile = dataFile;
+	public void setDocument(ArrayList<String [] > document) {
+		this.document = document;
 	}
 	public void setColumnNames(String columnNames) {
 		this.columnNames = separateLine(columnNames,pSeparator);
@@ -102,5 +102,8 @@ public class NaiveFileMetadataManager implements MetadataManagerInterface{
 		// TODO Auto-generated method stub
 		return null;
 	}
-
+	public ArrayList<string[]> getDocument(){
+		return this.document;
+	}
+	
 }
