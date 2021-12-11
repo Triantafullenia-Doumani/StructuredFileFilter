@@ -3,15 +3,25 @@ package file.manager;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
 import metadata.MetadataManager;
+import metadata.NaiveFileMetadataManager;
 import filtering.FilteringEngine;
 
 public class StructuredFileManager implements StructuredFileManagerInterface{
+	
+	private HashMap<String, NaiveFileMetadataManager> allMetadata;
+	private FilteringEngine filteringEngine;
+	
 
+	public StructuredFileManager() {
+		this.allMetadata		= new HashMap<String, NaiveFileMetadataManager>();
+	}
 	
 
 	/**
@@ -27,20 +37,14 @@ public class StructuredFileManager implements StructuredFileManagerInterface{
 	 * @throws NullPointerException
 	 */
 	
-	 //how to use params
 	public File registerFile(String pAlias, String pPath, String pSeparator) throws IOException, NullPointerException{
-		if(pAlias == null || pPath == null || pSeparator == null) {
-			throw new NullPointerException();
-		}
-	    try {
-			File file = new File(pPath);   
-	        Scanner scanner = new Scanner(file);
-	      } catch (IOException e) {
-	    	  throw new IOException();
-	      }
-        return null;
+		File pFile = new File(pPath);   
+		NaiveFileMetadataManager metadata = new NaiveFileMetadataManager(pAlias,pFile,pSeparator); 
+		metadata.registerFile();
+		allMetadata.put(pAlias,metadata);
+        return pFile;
 	}
-
+	
 	/**
 	 * Returns an array of String with the column names of the file registered with
 	 * the alias parameter
@@ -50,7 +54,9 @@ public class StructuredFileManager implements StructuredFileManagerInterface{
 	 *         alias has not been registered
 	 */
 	public String[] getFileColumnNames(String pAlias) {
-		return null;
+		//MetadataManager metadata = new MetadataManager(); 
+		NaiveFileMetadataManager metadata = this.allMetadata.get(pAlias);
+		return metadata.getColumnNames();
 	}
 
 	/**
@@ -69,6 +75,8 @@ public class StructuredFileManager implements StructuredFileManagerInterface{
 	 *         record in the result is represented as an array of strings.
 	 */
 	public List<String[]> filterStructuredFile(String pAlias, Map<String, List<String>> pAtomicFilters){
+		NaiveFileMetadataManager metadata = this.allMetadata.get(pAlias);
+		
 		return null;
 	}
 

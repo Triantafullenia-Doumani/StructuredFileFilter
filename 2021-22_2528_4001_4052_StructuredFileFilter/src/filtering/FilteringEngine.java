@@ -1,8 +1,16 @@
 package filtering;
 
-import metadata.MetadataManagerInterface;
+import java.util.List;
+import java.util.Map;
 
-public class Engine implements FilteringEngineInterface {
+import metadata.MetadataManagerInterface;
+import metadata.NaiveFileMetadataManager; // WTF
+
+public class FilteringEngine implements FilteringEngineInterface {
+
+	public FilteringEngine(Map<String, List<String>> atomicFilters, NaiveFileMetadataManager metadataManager) {
+		// TODO Auto-generated constructor stub
+	}
 
 	/**
 	 * Organizes the Filtering Engine with the appropriate context information, such
@@ -19,7 +27,7 @@ public class Engine implements FilteringEngineInterface {
 	 */
 	public int setupFilteringEngine(Map<String, List<String>> pAtomicFilters,
 			MetadataManagerInterface pMetadataManager) {
-		return;
+		return 0;
 	}
 
 	/**
@@ -33,7 +41,8 @@ public class Engine implements FilteringEngineInterface {
 	 * @see metadata.MetadataManagerInterface.setupFilteringEngine
 	 */
 	public List<String[]> workWithFile(){
-		return;
+		return null;
 	}
+
 
 }
