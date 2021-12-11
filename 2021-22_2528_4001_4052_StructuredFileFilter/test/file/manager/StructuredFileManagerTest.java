@@ -68,6 +68,7 @@ public class StructuredFileManagerTest {
 		assert (cRefFile.getCanonicalPath().equals(cFile.getCanonicalPath()));
 	}
 
+	
 	/**
 	 * Test method for
 	 * {@link file.manager.StructuredFileManager#filterStructuredFile(java.lang.String, java.util.Map)}.

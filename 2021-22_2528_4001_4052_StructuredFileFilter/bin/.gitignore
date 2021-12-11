@@ -1,5 +1,10 @@
 /application/
+<<<<<<< HEAD
 /filtering/
 /metadata/
 /resources/
 /file/
+=======
+/file/
+/filtering/
+>>>>>>> 344f9879f0866395f64b029cd87532004918a29d

@@ -7,7 +7,6 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.nio.file.InvalidPathException;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -36,7 +35,6 @@ public class NaiveApplicationController {
 			resultFile = this.fileManager.registerFile(pAlias, pPath, pSeparator);
 		} catch (NullPointerException e) {
 			System.err.println("NaiveApplicationController::registerFile NullPointerException");
-			e.printStackTrace();
 		} catch (IOException e) {
 			System.err.println("NaiveApplicationController::registerFile IOException");
 			e.printStackTrace();
@@ -147,7 +145,7 @@ public class NaiveApplicationController {
 	}
 	public String askForSeparator() {
 		
-        System.out.println("Please enter the file separator. ',' '\t' or '|' for example");
+        System.out.println("Please enter the file separator. ',' '\\t' or '|' for example");
         String fileSeparator = scanner.nextLine();        
         return fileSeparator;
         // thelw kanenan elegxo gia auto?
