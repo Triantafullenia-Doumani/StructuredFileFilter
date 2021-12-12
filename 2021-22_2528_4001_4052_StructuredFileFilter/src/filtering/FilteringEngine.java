@@ -75,7 +75,7 @@ public class FilteringEngine implements FilteringEngineInterface {
 	for(String [] line: document) {
 		String fieldValue = line[position];
 		if(!filteredDocument.contains(fieldValue)) {
-			System.out.println("Field's value is not acceptable: "+fieldValue);
+			System.out.println("Field's value is not acceptable RRR: "+fieldValue);
 			return -1;
 		}
 		filteredDocument.add(line);
