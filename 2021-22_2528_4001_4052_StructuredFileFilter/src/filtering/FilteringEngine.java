@@ -1,15 +1,25 @@
 package filtering;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import metadata.HashMap;
+import metadata.Integer;
 import metadata.MetadataManagerInterface;
-import metadata.NaiveFileMetadataManager; // WTF
+import metadata.NaiveFileMetadataManager;
+import metadata.String;
 
 public class FilteringEngine implements FilteringEngineInterface {
 
+	private Map<String, List<String>> pAtomicFilters;
+	private NaiveFileMetadataManager pMetadatamanager;
+	
 	public FilteringEngine(Map<String, List<String>> atomicFilters, NaiveFileMetadataManager metadataManager) {
-		// TODO Auto-generated constructor stub
+		
+		if(setupFilteringEngine(AtomicFilters,metadataManager) == -1) {
+			System.out.println("SET UP -1");
+		}
 	}
 
 	/**
@@ -27,23 +37,27 @@ public class FilteringEngine implements FilteringEngineInterface {
 	 */
 	public int setupFilteringEngine(Map<String, List<String>> pAtomicFilters,
 			MetadataManagerInterface pMetadataManager) {
+
+		List<String> acceptableValues = new ArrayList<String []>();
+		Map <String, Integer>  fieldPositions = new HashMap<String, Integer>();
 		
-		// TODO ean Map<String> =/ ta pedia mas, return -1;
-		
-		ArrayList<String[]> document = new ArrayList<String[]>();
-		document = pMetadataManager.getDocument();
-		
-		for(int i=0; i< )
-			for(int j=0; j<document.length; j++) {
-			
+		String[] columnNames = pMetadataManager.getColumnNames();
+		for (Map.Entry<String, List<String>> pAtomicFilter : pAtomicFilters.entrySet()) {
+			String key = pAtomicFilter.getKey();
+			acceptableValues = pAtomicFilters.getValue();
+			if(!columnNames.contains(key)) {
+				System.out.println("Field's name is not acceptable: "+key);
+				return -1;
 			}
-		
-		
+			this.pAtomicFilters.put(key,acceptableValues);
+		}
+		this.pMetadatamanager = pMetadataManager;
+		workWithFile();
 		return 0;
 	}
 
 	/**
-	 * Returns the result of applying a filter to a filter; requires the
+	 * Returns the result of applying a filter to a file; requires the
 	 * setupFilteringEngine to have fired before such that the FilteringEngine has
 	 * been equipped with the appropriate context values.
 	 * 
@@ -53,8 +67,20 @@ public class FilteringEngine implements FilteringEngineInterface {
 	 * @see metadata.MetadataManagerInterface.setupFilteringEngine
 	 */
 	public List<String[]> workWithFile(){
-		return null;
+	List<String []> document = new ArrayList<String [ ]>();
+	List<String []>  filteredDocument = new ArrayList<Stirng []>();
+	Map <String, Integer>  fieldPositions = new HashMap<String, Integer>();
+	fieldPositions = this.pMetadatamanager.getFieldPositions();
+	document = this.pMetadatamanager.getDocument();
+	for(String [] line: document) {
+		String fieldValue = line[position];
+		if(!filteredDocument.contains(fieldValue)) {
+			System.out.println("Field's value is not acceptable: "+fieldValue);
+			return -1;
+		}
+		filteredDocument.add(line);
 	}
-
+	return filteredDocument();
+}
 
 }
