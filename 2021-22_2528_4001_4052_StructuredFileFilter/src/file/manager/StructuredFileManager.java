@@ -4,23 +4,22 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
-import metadata.MetadataManager;
 import metadata.NaiveFileMetadataManager;
 import filtering.FilteringEngine;
 
 public class StructuredFileManager implements StructuredFileManagerInterface{
 	
-	private HashMap<String, NaiveFileMetadataManager> allMetadata;
-	private FilteringEngine filteringEngine;
+	private HashMap<String, NaiveFileMetadataManager> allMetadata;	
+	private NaiveFileMetadataManager metadata;
 	
-
 	public StructuredFileManager() {
-		this.allMetadata		= new HashMap<String, NaiveFileMetadataManager>();
+		this.allMetadata	= new HashMap<String, NaiveFileMetadataManager>();
 	}
 	
 
@@ -38,10 +37,14 @@ public class StructuredFileManager implements StructuredFileManagerInterface{
 	 */
 	
 	public File registerFile(String pAlias, String pPath, String pSeparator) throws IOException, NullPointerException{
-		File pFile = new File(pPath);   
+		File pFile = new File(pPath);  
+		if(!pFile.exists()) {
+			System.out.println("The file that you entered does not exists on filesystem");
+			return null;
+		}
 		NaiveFileMetadataManager metadata = new NaiveFileMetadataManager(pAlias,pFile,pSeparator); 
 		metadata.registerFile();
-		allMetadata.put(pAlias,metadata);
+		this.allMetadata.put(pAlias,metadata);
         return pFile;
 	}
 	
@@ -50,13 +53,22 @@ public class StructuredFileManager implements StructuredFileManagerInterface{
 	 * the alias parameter
 	 * 
 	 * @param pAlias a string with a short code-name for the registered file
-	 * @return an array of String with the column names of the file; null if the
-	 *         alias has not been registered
+	 * @return an array of String with the column names of the file; 
+	 *  or return zero-sized array of strings instead, if the
+	 *  alias has not been registered
 	 */
 	public String[] getFileColumnNames(String pAlias) {
+		String[] columnNames = {};
+		if(pAlias == null) {
+			return columnNames;
+		}
 		//MetadataManager metadata = new MetadataManager(); 
 		NaiveFileMetadataManager metadata = this.allMetadata.get(pAlias);
-		return metadata.getColumnNames();
+		if(metadata == null) {
+			return columnNames;
+		}
+		columnNames = metadata.getColumnNames();
+		return columnNames;
 	}
 
 	/**
@@ -75,9 +87,12 @@ public class StructuredFileManager implements StructuredFileManagerInterface{
 	 *         record in the result is represented as an array of strings.
 	 */
 	public List<String[]> filterStructuredFile(String pAlias, Map<String, List<String>> pAtomicFilters){
-		NaiveFileMetadataManager metadata = this.allMetadata.get(pAlias);
-		
-		return null;
+		metadata = this.allMetadata.get(pAlias);
+		List<String[]> filteredFile = new ArrayList<String[]> ();
+		String[] columnNames = getFileColumnNames(pAlias);
+		filteredFile.add(columnNames);
+		FilteringEngine filteringEngine = new FilteringEngine(pAtomicFilters,metadata);
+		return filteringEngine.workWithFile();
 	}
 
 	/**
@@ -92,7 +107,36 @@ public class StructuredFileManager implements StructuredFileManagerInterface{
 	 *         number of records directed to the PrintStream otherwise.
 	 */
 	public int printResultsToPrintStream(List<String[]> recordList, PrintStream pOut) {
-		return 0;
+		if(pOut == null || recordList == null) {
+			return -1;
+		}
+		int counter = 0;		
+		for(String [] record:recordList) {
+			pOut.println(Arrays.asList(record));
+			counter ++;
+		}
+		return counter;
 	}
 	
+	public ArrayList<String[]> getMetadata(String pAlias) {
+		NaiveFileMetadataManager metadata = allMetadata.get(pAlias);
+		if(metadata == null) {
+			return null;
+		}
+		ArrayList<String[]> series = metadata.getSeries();
+		return series;
+	}
+	public NaiveFileMetadataManager getMetadataObject(String pAlias) {
+		NaiveFileMetadataManager metadataObj = allMetadata.get(pAlias);
+		if(metadataObj == null) {
+			return null;
+		}
+		return metadataObj;
+	}
+
+
+	public void addNewObj(String pAlias,NaiveFileMetadataManager newMetadataObj) {
+		this.allMetadata.put(pAlias,newMetadataObj);
+		
+	}
 }

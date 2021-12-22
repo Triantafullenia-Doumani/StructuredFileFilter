@@ -5,23 +5,20 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
-import java.nio.file.InvalidPathException;
-import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
 import application.chart.management.VisualizationEngine;
 import application.jtable.management.JTableViewer;
+import file.manager.StructuredFileManager;
 import file.manager.StructuredFileManagerFactory;
 import file.manager.StructuredFileManagerInterface;
-import java.util.Scanner;
 
 public class NaiveApplicationController {
 
 	private final StructuredFileManagerInterface fileManager;
 	private final VisualizationEngine visualizationEngine;
-	private static Scanner scanner;
 
 	public NaiveApplicationController() {
 		StructuredFileManagerFactory engineFactory = new StructuredFileManagerFactory();
@@ -43,11 +40,10 @@ public class NaiveApplicationController {
 	}
 
 	public List<String[]> executeFilterAndShowJTable(String alias, Map<String, List<String>> atomicFilters,
-			String outputFileName) {
+			String outputFileName) throws Exception {
 		List<String[]> result;
 		String[] columnNames;
 		int numRows;
-
 		result = fileManager.filterStructuredFile(alias, atomicFilters);
 		columnNames = fileManager.getFileColumnNames(alias);
 
@@ -94,7 +90,8 @@ public class NaiveApplicationController {
 		jTableViewer.createAndShowJTable();
 
 	}
-
+	
+	// Works only for columns that are filled with numbers
 	public void showSingleSeriesBarChart(String pAlias, List<String[]> series, String pXAxisName, String pYAxisName,
 			String outputFileName) {
 		String[] columnNames = this.fileManager.getFileColumnNames(pAlias);
@@ -104,7 +101,7 @@ public class NaiveApplicationController {
 		this.visualizationEngine.showSingleSeriesBarChart(pAlias, series, pXAxisName, pYAxisName, outputFileName, xPos,
 				yPos);
 	}
-
+	// Works only for columns that are filled with numbers
 	public void showSingleSeriesLineChart(String pAlias, List<String[]> series, String pXAxisName, String pYAxisName,
 			String outputFileName) {
 		String[] columnNames = this.fileManager.getFileColumnNames(pAlias);
@@ -114,55 +111,11 @@ public class NaiveApplicationController {
 		this.visualizationEngine.showSingleSeriesLineChart(pAlias, series, pXAxisName, pYAxisName, outputFileName, xPos,
 				yPos);
 	}
-	
-	public String askForAlias() {
-		
-        System.out.println("Please enter a file Alias");
-        String fileAlias = null;
-        while(true) {
-            	fileAlias = scanner.nextLine();
-            	if(fileAlias == null) {
-                    System.out.println("DWSE KALO Alias");
-            		continue;
-            	}
-				return fileAlias;
-        }
+	public StructuredFileManagerInterface getFileManager() {
+		return fileManager;
 	}
-	
-	public String askForPath() {
-		System.out.println("Please enter file path");
-		String filePath = null;
-		while(true) {
-			filePath = scanner.nextLine();
-			try {
-	        	Paths.get(filePath);
-				return filePath;
-	   		} catch (InvalidPathException | NullPointerException ex) {
-	   			System.out.println("I AM ASKING FOR A REAL PATH");
-	   			continue;
-	        }
-		}
-	}
-	public String askForSeparator() {
-		
-        System.out.println("Please enter the file separator. ',' '\\t' or '|' for example");
-        String fileSeparator = scanner.nextLine();        
-        return fileSeparator;
-        // thelw kanenan elegxo gia auto?
 
-	}
-	/** Program Starts Here **/
-    public static void main(String[] args){
-
-    	NaiveApplicationController naiveAppController  = new NaiveApplicationController();
-    	scanner = new Scanner(System.in);
-        String fileAlias = naiveAppController.askForAlias();
-        String filePath = naiveAppController.askForPath();
-        String fileSeparator = naiveAppController.askForSeparator();
-        naiveAppController.registerFile(fileAlias, filePath, fileSeparator);
-        scanner.close();
-        return;	
-    }	 
+		// TODO Auto-generated method stub
 
 }// end class
 

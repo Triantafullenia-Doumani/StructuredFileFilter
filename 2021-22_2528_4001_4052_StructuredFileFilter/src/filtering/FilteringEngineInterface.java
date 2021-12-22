@@ -24,7 +24,7 @@ public interface FilteringEngineInterface {
 	 *                         as key, and a list of acceptable values as the value
 	 * @param pMetadataManager a MetadataManager practically representing the file
 	 *                         being filtered
-	 * @return
+	 * @return 0 if the filtering engine is set up correctly, -1 otherwise (e.g., a null parameter is passed)
 	 */
 	public int setupFilteringEngine(Map<String, List<String>> pAtomicFilters,
 			MetadataManagerInterface pMetadataManager);

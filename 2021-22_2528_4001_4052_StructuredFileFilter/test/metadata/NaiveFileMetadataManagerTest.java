@@ -7,8 +7,10 @@ import static org.junit.Assert.*;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -34,7 +36,7 @@ public class NaiveFileMetadataManagerTest {
 		pSeparator = ",";
 		metadataManager = new NaiveFileMetadataManager(pAlias, pFile, pSeparator);
 	}
-
+	
 	/**
 	 * @throws java.lang.Exception
 	 */
@@ -42,6 +44,7 @@ public class NaiveFileMetadataManagerTest {
 	public void setUp() throws Exception {
 		;
 	}
+
 
 //	/**
 //	 * Test method for {@link metadata.NaiveFileMetadataManager#NaiveFileMetadataManager(java.lang.String, java.io.File, java.lang.String)}.
@@ -52,19 +55,21 @@ public class NaiveFileMetadataManagerTest {
 //	}
 
 	/**
-	 * Test method for
-	 * {@link metadata.NaiveFileMetadataManager#getFieldPositions()}.
+	 * Test method for {@link metadata.NaiveFileMetadataManager#getFieldPositions()}.
 	 */
 	@Test
 	public final void testGetFieldPositionsHappyDay() {
-
-		String[] expectedColNames = { "HF:Financing scheme", "HC:Function", "HP:Provider", "LOCATION:Country",
-				"TIME:Year", "MSR:Value" };
+		
+		String[] expectedColNames= {"HF:Financing scheme","HC:Function","HP:Provider","LOCATION:Country","TIME:Year","MSR:Value"};
 		List<String> colList = Arrays.asList(expectedColNames);
-		int schemePos = colList.indexOf("HF:Financing scheme");
-		int timePos = colList.indexOf("TIME:Year");
-		assertEquals(0, schemePos);
-		assertEquals(4, timePos);
+		int expectedSchemePos = colList.indexOf("HF:Financing scheme"); //0
+		int expectedTimePos = colList.indexOf("TIME:Year"); 			//4
+		
+		Map<String, Integer> resultMap = metadataManager.getFieldPositions();
+		int schemePos = resultMap.get("HF:Financing scheme");		
+		int timePos = resultMap.get("TIME:Year");
+		assertEquals(expectedSchemePos, schemePos);
+		assertEquals(expectedTimePos, timePos);
 	}
 
 	/**
@@ -78,10 +83,9 @@ public class NaiveFileMetadataManagerTest {
 		if (!resultFile.exists())
 			fail("The result file does not exist");
 		try {
-			assert (referenceFile.getCanonicalPath().equals(resultFile.getCanonicalPath()));
+			assert(referenceFile.getCanonicalPath().equals(resultFile.getCanonicalPath()) );
 		} catch (IOException e) {
-			System.err.println(
-					"NaiveFileMAtadataManagerTest::testGetDataFileHappyDay() failed to contract ref and result files");
+			System.err.println("NaiveFileMAtadataManagerTest::testGetDataFileHappyDay() failed to contract ref and result files");
 			e.printStackTrace();
 		}
 	}
@@ -101,9 +105,8 @@ public class NaiveFileMetadataManagerTest {
 	@Test
 	public final void testGetColumnNamesHappyDay() {
 		String[] resColNames = metadataManager.getColumnNames();
-		String[] expectedColNames = { "HF:Financing scheme", "HC:Function", "HP:Provider", "LOCATION:Country",
-				"TIME:Year", "MSR:Value" };
-		for (int i = 0; i < resColNames.length; i++) {
+		String[] expectedColNames= {"HF:Financing scheme","HC:Function","HP:Provider","LOCATION:Country","TIME:Year","MSR:Value"};
+		for (int i =0; i< resColNames.length;i++) {
 			if (!resColNames[i].equals(expectedColNames[i]))
 				fail("Erroneous col name arrays");
 		}
@@ -117,15 +120,30 @@ public class NaiveFileMetadataManagerTest {
 		String resultAlias = metadataManager.getAlias();
 		assertEquals(resultAlias, "defaultAlias");
 	}
-
-	// @Test(expected = Exception.class)
-	@Test(expected = NullPointerException.class)
-	public final void testGetDataFileWrongFile() {
+		
+	@Test
+	public final void testGetSeriesVeryHappyDay() {
+		ArrayList<String[]> resultSeries = metadataManager.getSeries();
+		//expected series are with len 26
+		assertEquals(26, resultSeries.size());
+	}
+	//@Test(expected = Exception.class)
+	@Test(expected = IOException.class)
+	public final void testGetDataFileWrongFile() throws IOException {
 		String alias = "defaultAlias";
 		File f = new File("./test/resources/input/NowyouSeeMeNowYouDont.csv");
 		String separator = ",";
-		metadataManager = new NaiveFileMetadataManager(alias, f, separator);
-
+		NaiveFileMetadataManager anotherMetadataManager = new NaiveFileMetadataManager(alias, f, separator);
 	}
-
-}// end class
+    @Test
+    public final void testSeparateLineHappyDay() {
+        String testedInput = "V,erySi,mpl,e, ,t,est";
+        String testedSeparator = ",";
+        String [] expectedOutput = {"V", "erySi", "mpl", "e", " ", "t", "est"};
+        String [] observedOutput = metadataManager.separateLine(testedInput, testedSeparator);
+     // assertEquals(expectedOutput, observedOutput);
+        for(int i=0; i<expectedOutput.length; i++) {
+            assertEquals(expectedOutput[i], observedOutput[i]);
+        }
+    }
+}//end class

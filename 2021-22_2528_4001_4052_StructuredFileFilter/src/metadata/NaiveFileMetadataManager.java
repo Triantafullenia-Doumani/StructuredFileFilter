@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
@@ -13,42 +14,49 @@ public class NaiveFileMetadataManager implements MetadataManagerInterface{
 	private File pFile;
 	private String pSeparator;
 	private String[] columnNames; 
-	private ArrayList<String []> document;
+	private ArrayList<String[]> series;
 	
+	public NaiveFileMetadataManager(String pAlias, File pFile, String pSeparator) throws NullPointerException, IOException {
+		if(pAlias == null || pSeparator == null) {
+	           throw new NullPointerException("Null arguments are not valid in NaiveFileMetadataManager");
+		}
+		this.pAlias 		= pAlias;
+		this.pFile 			= pFile;
+		this.pSeparator 	= pSeparator;
+		registerFile();
+	}
 	public String[] separateLine(String line, String separator){
 		 return line.split(separator);
 	}
 	
-	public NaiveFileMetadataManager(String pAlias, File pFile, String pSeparator) {
-		this.pAlias 		= pAlias;
-		this.pFile 			= pFile;
-		this.pSeparator 	= pSeparator;
-	}
-	
 	public void registerFile() throws IOException {
-		ArrayList<String [] > document = new ArrayList<String []>();
-		File file;
+		ArrayList<String [] > series = new ArrayList<String []>();
 		Scanner scanner;
 	    try {
 	        scanner = new Scanner(this.pFile);
 	        String columnNames = scanner.nextLine();
-	        setColumnNames(columnNames);
+			String[] columnNamesSplited = separateLine(columnNames,this.pSeparator);
+	        setColumnNames(columnNamesSplited);
 	        while (scanner.hasNextLine()) {
 	            String line = scanner.nextLine();
 	            String [] lineArray = separateLine(line,pSeparator);
-	            document.add(lineArray);
+	            series.add(lineArray);
 	          }
 		} catch (IOException e) {
 		  throw new IOException();
 		}
-	    setDocument(document);
+	    setSeries(series);
 		scanner.close();
 	}
-	public void setDocument(ArrayList<String [] > document) {
-		this.document = document;
+	public void setSeries(ArrayList<String [] > series) {
+		this.series = new ArrayList<String [] >();
+		this.series = series;
 	}
-	public void setColumnNames(String columnNames) {
-		this.columnNames = separateLine(columnNames,pSeparator);
+	public void setColumnNames(String[] columnNamesIn) {
+		this.columnNames = new String[columnNamesIn.length];
+		for(int i=0; i<columnNamesIn.length; i++ ) {
+			this.columnNames[i] = columnNamesIn[i];
+		}
 	}
 	
 	/**
@@ -59,13 +67,15 @@ public class NaiveFileMetadataManager implements MetadataManagerInterface{
 	 *         the position of the column as value
 	 */
 	public Map<String, Integer> getFieldPositions(){
-		Map <String, Integer>  fieldPositions = new HashMap<String, Integer>();
-		for (int i = 0; i < this.columnNames.length; i++) {
+		Map<String, Integer> fieldPositions = new HashMap<String, Integer>();
+		if(this.columnNames == null) {
+			System.out.println("NULL column names");
+			return fieldPositions;
+		}
+		for(int i=0; i<this.columnNames.length; i++) {
 			fieldPositions.put(this.columnNames[i],i);
 		}
-        System.out.print("third statement");  
-
-		return fieldPositions;
+		return fieldPositions;		
 	}
 
 	/**
@@ -76,7 +86,7 @@ public class NaiveFileMetadataManager implements MetadataManagerInterface{
 	 *         handles
 	 */
 	public File getDataFile() {
-		return null;
+		return this.pFile;
 	}
 
 	/**
@@ -95,15 +105,17 @@ public class NaiveFileMetadataManager implements MetadataManagerInterface{
 	 * @return an array of String with the column names
 	 */
 	public String[] getColumnNames() {
+		String [] columnNames = {};
+		if(this.columnNames==null) {
+			return columnNames;
+		}
 		return this.columnNames;
 		
 	}
 	public String getAlias() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.pAlias;
 	}
-	public ArrayList<string[]> getDocument(){
-		return this.document;
+	public ArrayList<String[]> getSeries(){
+		return this.series;
 	}
-	
 }

@@ -1,24 +1,24 @@
 package filtering;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import metadata.HashMap;
-import metadata.Integer;
 import metadata.MetadataManagerInterface;
 import metadata.NaiveFileMetadataManager;
-import metadata.String;
 
 public class FilteringEngine implements FilteringEngineInterface {
 
 	private Map<String, List<String>> pAtomicFilters;
-	private NaiveFileMetadataManager pMetadatamanager;
+	private NaiveFileMetadataManager pMetadatamanager = null;
 	
 	public FilteringEngine(Map<String, List<String>> atomicFilters, NaiveFileMetadataManager metadataManager) {
 		
-		if(setupFilteringEngine(AtomicFilters,metadataManager) == -1) {
-			System.out.println("SET UP -1");
+		pAtomicFilters = new HashMap<String, List<String>>();
+		if(setupFilteringEngine(atomicFilters,metadataManager) == -1) {
+			System.out.println("Something went wrong. Filtering failed");
 		}
 	}
 
@@ -33,26 +33,28 @@ public class FilteringEngine implements FilteringEngineInterface {
 	 *                         as key, and a list of acceptable values as the value
 	 * @param pMetadataManager a MetadataManager practically representing the file
 	 *                         being filtered
-	 * @return 0 succes, -1 fail.
+	 * @return 0 success, -1 fail.
 	 */
 	public int setupFilteringEngine(Map<String, List<String>> pAtomicFilters,
 			MetadataManagerInterface pMetadataManager) {
 
-		List<String> acceptableValues = new ArrayList<String []>();
-		Map <String, Integer>  fieldPositions = new HashMap<String, Integer>();
-		
+		List<String> acceptableValues = new ArrayList<String>();		
 		String[] columnNames = pMetadataManager.getColumnNames();
+		
+		if(columnNames == null || columnNames.length == 0 ) {
+			return -1;
+		}
 		for (Map.Entry<String, List<String>> pAtomicFilter : pAtomicFilters.entrySet()) {
 			String key = pAtomicFilter.getKey();
-			acceptableValues = pAtomicFilters.getValue();
-			if(!columnNames.contains(key)) {
-				System.out.println("Field's name is not acceptable: "+key);
+			acceptableValues = pAtomicFilters.get(key);
+			if(!Arrays.asList(columnNames).contains(key)) {
+				System.out.println("This key is not valid:"+key + " . Please try again to import filters");
 				return -1;
 			}
+			
 			this.pAtomicFilters.put(key,acceptableValues);
 		}
-		this.pMetadatamanager = pMetadataManager;
-		workWithFile();
+		this.pMetadatamanager = (NaiveFileMetadataManager) pMetadataManager;
 		return 0;
 	}
 
@@ -68,19 +70,39 @@ public class FilteringEngine implements FilteringEngineInterface {
 	 */
 	public List<String[]> workWithFile(){
 	List<String []> document = new ArrayList<String [ ]>();
-	List<String []>  filteredDocument = new ArrayList<Stirng []>();
+	List<String []> filteredDocument = new ArrayList<String []>();
+
+	List<String> acceptableValues = new ArrayList<String>();
 	Map <String, Integer>  fieldPositions = new HashMap<String, Integer>();
+	if( this.pMetadatamanager == null) {
+		return null;
+	}
 	fieldPositions = this.pMetadatamanager.getFieldPositions();
-	document = this.pMetadatamanager.getDocument();
-	for(String [] line: document) {
-		String fieldValue = line[position];
-		if(!filteredDocument.contains(fieldValue)) {
-			System.out.println("Field's value is not acceptable RRR: "+fieldValue);
-			return -1;
-		}
+
+	document = this.pMetadatamanager.getSeries();
+
+	for(String[] line : document) {
 		filteredDocument.add(line);
 	}
-	return filteredDocument();
-}
+	for (Map.Entry<String, List<String>> pAtomicFilter : pAtomicFilters.entrySet()) {
+		String key = pAtomicFilter.getKey();
+		int position = fieldPositions.get(key);
+		acceptableValues = pAtomicFilters.get(key);
+		int docSize = filteredDocument.size();
+		for(int i=0; i<docSize; i++) {
+			String [] line = filteredDocument.get(i);
+			String fieldValue = line[position];
+			if(acceptableValues.contains(fieldValue)) {
+				continue;
+			}
+			filteredDocument.remove(i);
+			// Move the cursor 1 step back, since we removed one line.
+			i--;
+			// decrease size, since we removed one line
+			docSize--;
+		}
+	}
+	return filteredDocument;
+ }
 
 }

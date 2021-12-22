@@ -54,8 +54,9 @@ public interface StructuredFileManagerInterface {
 	 *                       system handles.
 	 * @return a List of String[], which is the result set of the filter. Each
 	 *         record in the result is represented as an array of strings.
+	 * @throws Exception 
 	 */
-	public List<String[]> filterStructuredFile(String pAlias, Map<String, List<String>> pAtomicFilters);
+	public List<String[]> filterStructuredFile(String pAlias, Map<String, List<String>> pAtomicFilters) throws Exception;
 
 	/**
 	 * Directs a filter result in a PrintStream

@@ -1,22 +1,12 @@
-TEST FROM 1st ECLIPSE COMMIT
-EXAMPLE
-
-Assume that the project is being carried out by two students
-Mitsos Mitsopoulos with AM 4567
-Kitsos Kitsopoulos with AM 4678
-
-Todo
-1. Rename the entire project to 4567_4678_StructuredFileFilter
-   (such that we know which submitted project pertains to which team)
-2. Populate the current file with the respective content that the spec says, e.g.,:
-
 ********************************************
-Names
-Alexandros Pournaras with AM 2528
-Kitsos Kitsopoulos with AM 4678
+Names:
+POURNARAS ALEXANDROS with AM 2528
+SOLDATOU CHRISTINA OLYMPIA with AM 4001
+TRIANTAFYLLIO DOUMANI with AM 4052
 
-Req's
+Input files:
+Just inside the 2021-22_2528_4001_4052_StructuredFileFilter folder
+
+Lib:
 No extra libraries are needed
 ********************************************
-
-test

@@ -57,16 +57,33 @@ public class FilteringEngineTest {
 	 */
 	@Test
 	public final void testMultipleCriteriaHappyDay() throws Exception {
-
+		Map<String, List<String>> multiCriteriaAtomicFilters = new HashMap<String, List<String>>(atomicFilters);
 		List<String> timeFilter = new ArrayList<String>();
 		timeFilter.add("2010");
 		timeFilter.add("2011");
 		timeFilter.add("2012");
-		atomicFilters.put("TIME:Year", timeFilter);
+		multiCriteriaAtomicFilters.put("TIME:Year", timeFilter);
 
-		FilteringEngine anotherfilteringEngine = new FilteringEngine(atomicFilters, metadataManager);
+		FilteringEngine anotherfilteringEngine = new FilteringEngine(multiCriteriaAtomicFilters, metadataManager);
 		List<String[]> verySimpleResult = anotherfilteringEngine.workWithFile();
 		assertEquals(3, verySimpleResult.size());
 	}
+    
+	/**
+     * Test method for {@link filtering.FilteringEngine#workWithFile()}.
+     */
+    @Test
+    public final void testNoValidColumnName() throws Exception {
 
+        List<String> timeFilter = new ArrayList<String>();
+        timeFilter.add("FAKE YEAR 1");
+        timeFilter.add("FAKE YEAR 2");
+        timeFilter.add("FAKE YEAR 3");
+        atomicFilters.put("TIME:Year", timeFilter);
+
+        FilteringEngine anotherfilteringEngine = new FilteringEngine(atomicFilters, metadataManager);
+        List<String[]> verySimpleResult = anotherfilteringEngine.workWithFile();
+        assertEquals(0, verySimpleResult.size());
+    }
+    
 }// end class

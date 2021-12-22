@@ -19,7 +19,8 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import file.manager.StructuredFileManagerFactory;
+import metadata.NaiveFileMetadataManager;
+
 
 /**
  * @author pvassil
@@ -27,14 +28,13 @@ import file.manager.StructuredFileManagerFactory;
  */
 public class StructuredFileManagerTest {
 	private static StructuredFileManager fileManager;
-
 	/**
 	 * @throws java.lang.Exception
 	 */
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
 		fileManager = new StructuredFileManager();
-
+	
 	}
 
 	/**
@@ -46,39 +46,33 @@ public class StructuredFileManagerTest {
 	}
 
 	/**
-	 * Test method for
-	 * {@link file.manager.StructuredFileManager#registerFile(java.lang.String, java.lang.String, java.lang.String)}.
-	 * 
-	 * @throws IOException
-	 * @throws NullPointerException
+	 * Test method for {@link file.manager.StructuredFileManager#registerFile(java.lang.String, java.lang.String, java.lang.String)}.
+	 * @throws IOException 
+	 * @throws NullPointerException 
 	 */
 	@Test
 	public final void testRegisterFileHappyDay() throws NullPointerException, IOException {
-		String sAlias = "simple";
+		String sAlias = "simple";		
 		String sSeparator = ",";
-		File sFile = fileManager.registerFile(sAlias, "./test/resources/input/simple.csv", sSeparator);
+		File sFile =		fileManager.registerFile(sAlias, "./test/resources/input/simple.csv", sSeparator);
 		File sRefFile = new File("./test/resources/input/simple.csv");
 
 		String cAlias = "covid";
 		String cSeparator = ",";
-		File cFile = fileManager.registerFile(cAlias, "./test/resources/input/CovidData.csv", cSeparator);
+		File cFile =		fileManager.registerFile(cAlias, "./test/resources/input/CovidData.csv", cSeparator);
 		File cRefFile = new File("./test/resources/input/CovidData.csv");
 
-		assert (sRefFile.getCanonicalPath().equals(sFile.getCanonicalPath()));
-		assert (cRefFile.getCanonicalPath().equals(cFile.getCanonicalPath()));
+		assert(sRefFile.getCanonicalPath().equals(sFile.getCanonicalPath()) );
+		assert(cRefFile.getCanonicalPath().equals(cFile.getCanonicalPath()) );
 	}
 
-	
 	/**
-	 * Test method for
-	 * {@link file.manager.StructuredFileManager#filterStructuredFile(java.lang.String, java.util.Map)}.
-	 * 
-	 * @throws IOException
-	 * @throws NullPointerException
+	 * Test method for {@link file.manager.StructuredFileManager#filterStructuredFile(java.lang.String, java.util.Map)}.
+	 * @throws Exception 
 	 */
 	@Test
-	public final void testFilterStructuredFileHappyDay() throws NullPointerException, IOException {
-		String sAlias = "simple";
+	public final void testFilterStructuredFileHappyDay() throws Exception {
+		String sAlias = "simple";		
 		String sSeparator = ",";
 		fileManager.registerFile(sAlias, "./test/resources/input/simple.csv", sSeparator);
 		List<String[]> verySimpleResult = null;
@@ -89,12 +83,12 @@ public class StructuredFileManagerTest {
 		atomicFilters.put("LOCATION:Country", countryFilter);
 
 		verySimpleResult = fileManager.filterStructuredFile(sAlias, atomicFilters);
-		assertEquals(15, verySimpleResult.size());
+		assertEquals(15,verySimpleResult.size());
 	}
 
 	@Test
-	public final void testFilterStructuredFileNoRecords() throws NullPointerException, IOException {
-		String sAlias = "simple";
+	public final void testFilterStructuredFileNoRecords() throws Exception {
+		String sAlias = "simple";		
 		String sSeparator = ",";
 		fileManager.registerFile(sAlias, "./test/resources/input/simple.csv", sSeparator);
 		List<String[]> verySimpleResult = null;
@@ -105,24 +99,20 @@ public class StructuredFileManagerTest {
 		atomicFilters.put("LOCATION:Country", countryFilter);
 
 		verySimpleResult = fileManager.filterStructuredFile(sAlias, atomicFilters);
-		assertEquals(0, verySimpleResult.size());
+		assertEquals(0,verySimpleResult.size());
 	}
-
+	
 	/**
-	 * Test method for
-	 * {@link file.manager.StructuredFileManager#printResultsToPrintStream(java.util.List, java.io.PrintStream)}.
+	 * Test method for {@link file.manager.StructuredFileManager#printResultsToPrintStream(java.util.List, java.io.PrintStream)}.
 	 */
 	@Test
 	public final void testPrintResultsToPrintStreamHappyDay() {
 		String outputFilePath = "./test/resources/output/testPrintStreamHappy.txt";
-		String[] result1 = { "HFTOT:All financing schemes", "HCTOT:Current expenditure on health (all functions)",
-				"HPTOT:All providers", "AUT:Austria", "2010", "4261.055" };
-		String[] result2 = { "HFTOT:All financing schemes", "HCTOT:Current expenditure on health (all functions)",
-				"HPTOT:All providers", "AUT:Austria", "2011", "4345.16" };
+		String[] result1 = {"HFTOT:All financing schemes", "HCTOT:Current expenditure on health (all functions)", "HPTOT:All providers", "AUT:Austria", "2010", "4261.055"};
+		String[] result2 = {"HFTOT:All financing schemes", "HCTOT:Current expenditure on health (all functions)", "HPTOT:All providers", "AUT:Austria", "2011", "4345.16"};
 		List<String[]> result = new ArrayList<String[]>();
-		result.add(result1);
-		result.add(result2);
-
+		result.add(result1); result.add(result2);
+		
 		int numRows = 0;
 		FileOutputStream fOutStream = null;
 		try {
@@ -130,18 +120,16 @@ public class StructuredFileManagerTest {
 		} catch (FileNotFoundException e) {
 			System.err.println("structuredFileManagerTest::testPrintResultsHappyDay() failed to open fout stream");
 			e.printStackTrace();
-		}
-		PrintStream pOutStream = new PrintStream(fOutStream);
+		}  
+		PrintStream pOutStream = new PrintStream(fOutStream);  
 		numRows = fileManager.printResultsToPrintStream(result, pOutStream);
 		assertEquals(2, numRows);
 	}
 
 	/**
-	 * Test method for
-	 * {@link file.manager.StructuredFileManager#getFileColumnNames(java.lang.String)}.
-	 * 
-	 * @throws IOException
-	 * @throws NullPointerException
+	 * Test method for {@link file.manager.StructuredFileManager#getFileColumnNames(java.lang.String)}.
+	 * @throws IOException 
+	 * @throws NullPointerException 
 	 */
 	@Test
 	public final void testGetFileColumnNamesHappyDay() throws NullPointerException, IOException {
@@ -149,36 +137,47 @@ public class StructuredFileManagerTest {
 		String cSeparator = ",";
 		fileManager.registerFile(cAlias, "./test/resources/input/CovidData.csv", cSeparator);
 
-		String[] expectedColNames = { "DATE:dateRep", "DAY:day", "MONTH:month", "YEAR:year", "MSR:cases", "MSR:deaths",
-				"GEO:countriesAndTerritories", "GEO:geoId", "GEO:countryterritoryCode", "POPULATIONpopData2020",
-				"GEO:continentExp" };
+		String[] expectedColNames = {"DATE:dateRep", "DAY:day", "MONTH:month", "YEAR:year", 
+				"MSR:cases", "MSR:deaths", "GEO:countriesAndTerritories", "GEO:geoId", "GEO:countryterritoryCode", "POPULATIONpopData2020", "GEO:continentExp"};
 
 		String[] resColNames = fileManager.getFileColumnNames("covid");
-		for (int i = 0; i < resColNames.length; i++) {
+		for (int i =0; i< resColNames.length;i++) {
 			if (!resColNames[i].equals(expectedColNames[i]))
 				fail("Erroneous col name arrays");
 		}
 	}
 
 	@Test
-	public final void testGetFileColumnNamesWrongAlias() throws NullPointerException, IOException {
-		String cAlias = "covid";
-		String cSeparator = ",";
-		fileManager.registerFile(cAlias, "./test/resources/input/CovidData.csv", cSeparator);
-
-		String[] resColNames = fileManager.getFileColumnNames("SomeoneElseSomewhereElse");
+	public final void GetColumnNamesByInvalidAlias() throws NullPointerException, IOException {
+		String[] resColNames = fileManager.getFileColumnNames("Matrix");
 		assertEquals(0, resColNames.length);
-//		assertNull(resColNames);
-//DONE: fixed the method to return an empty array, instead of null		
 	}
 
 	@Test
-	public final void testGetFileColumnNamesNullAlias() throws NullPointerException, IOException {
-		String cAlias = "covid";
-		String cSeparator = ",";
-		fileManager.registerFile(cAlias, "./test/resources/input/CovidData.csv", cSeparator);
-
+	public final void testGetColumnNamesNullAlias() throws NullPointerException, IOException {
 		String[] resColNames = fileManager.getFileColumnNames(null);
-		assertEquals(0, resColNames.length);
+		assertEquals(0, resColNames.length);	
 	}
-}// end class
+	@Test
+	public final void testGetMetadataNull() throws NullPointerException, IOException {
+		ArrayList<String[]> metadata = fileManager.getMetadata("FakeAlias");
+		assertEquals(null, metadata);	
+	}
+	@Test
+	public final void testGetMetadata() throws NullPointerException, IOException {
+		String cAlias = "simple";
+		String cSeparator = ",";
+		fileManager.registerFile(cAlias, "./test/resources/input/simple.csv", cSeparator);
+
+		ArrayList<String[]> metadata = fileManager.getMetadata("simple");
+		assertEquals(26, metadata.size());	
+	}
+	@Test
+	public final void testGetMetadataObjNull() throws NullPointerException, IOException {
+	//	String cAlias = "covid";
+	//	String cSeparator = ",";
+	//	fileManager.registerFile(cAlias, "./test/resources/input/CovidData.csv", cSeparator);
+		NaiveFileMetadataManager metadataObj = fileManager.getMetadataObject("fakeAlias");
+		assertEquals(null, metadataObj);	
+	}
+}//end class

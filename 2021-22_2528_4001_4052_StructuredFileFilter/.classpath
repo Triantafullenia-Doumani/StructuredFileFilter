@@ -2,14 +2,6 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="test"/>
-<<<<<<< HEAD
-	<classpathentry exported="true" kind="lib" path="lib/xchart-3.8.1.jar"/>
-	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
-	<classpathentry exported="true" kind="lib" path="/StructuredFileFilter"/>
-	<classpathentry exported="true" kind="lib" path=".classpath"/>
-	<classpathentry exported="true" kind="lib" path=".project"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-=======
 	<classpathentry kind="lib" path="lib/xchart-3.8.1.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER">
@@ -17,6 +9,6 @@
 			<attribute name="module" value="true"/>
 		</attributes>
 	</classpathentry>
->>>>>>> branch 'main' of https://github.com/Triantafullenia-Doumani/StructuredFileFilter
+	<classpathentry kind="lib" path="/home/roze/eclipse-workspace/xchart-3.8.1/xchart-3.8.1/xchart-3.8.1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
